@@ -29,6 +29,34 @@ app.listen(3000, () => {
   console.log("Servidor online");
 });
 
+app.post("/cadastrar", (request, response) => {
+  const {titulo, artista, genero, ano, duracao} = request.body
+  const comandoInsert = "INSERT INTO musicas_braga (titulo, artista, genero, ano, duracao) VALUES(?, ?, ?, ?, ?)"
+  sql.query(comandoInsert, [titulo, artista, genero, ano, duracao], (error) => {
+    if (error){
+      console.log(error)
+      return 
+    }
+    response.status(201).json({ mensagem: "Música cadastrada com sucesso!" })
+  })
+})
+
+app.delete("/apagar/:id", (request, response) => {
+    const { id } = request.params
+
+    const comandoDelete = "DELETE FROM musicas_braga WHERE id = ?"
+
+    sql.query(comandoDelete, [id], (error) => {
+        if (error) {
+            console.log(error)
+            return
+        }
+
+        response.json({ mensagem: "Música apagada com sucesso!" })
+    })
+})
+
+
 
 
 export default app;
